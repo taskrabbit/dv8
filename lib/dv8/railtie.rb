@@ -3,9 +3,7 @@ module Dv8
 
     initializer "dv8.hook_activerecord" do |app|
       ActiveSupport.on_load(:active_record) do
-        ActiveRecord::Base.send(:include, Dv8::Base)
-        ActiveRecord::Associations::BelongsToAssociation.send(:include, Dv8::BelongsTo)
-        ActiveRecord::Associations::BelongsToPolymorphicAssociation.send(:include, Dv8::BelongsToPolymorphic)
+        Dv8.hook!
       end
     end
 

@@ -35,7 +35,8 @@ module Dv8
       keys = []
       keys << self.id
       keys << self.friendly_id if self.respond_to?(:friendly_id)
-      keys.map{|id| self.class.cfind_key(id) }
+      keys << self.to_param
+      keys.uniq.map{|id| self.class.cfind_key(id) }
     end
 
   end

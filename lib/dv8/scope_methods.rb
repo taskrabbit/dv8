@@ -4,7 +4,7 @@ module Dv8
     def find_one(id)
       object = find_one_from_cache(id)
       return object unless object.nil?
-      set_cache(id) do
+      set_cache do
         super(id)
       end
     end
@@ -31,7 +31,7 @@ module Dv8
       end
 
       klass.unscoped.where(:id => missing_ids.keys).each do |record|
-        set_cache record.id do
+        set_cache do
           results[missing_ids[record.id]] = record
         end
       end unless missing_ids.empty?

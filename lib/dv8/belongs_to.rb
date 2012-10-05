@@ -9,9 +9,8 @@ module Dv8
     private
 
     def find_target_with_cfind
-      return find_target_without_cfind unless @owner.using_cfind
-
       old_reflection = @reflection
+      return find_target_without_cfind unless @owner.using_cfind
       @reflection = @reflection.dup
       @reflection.instance_eval do
         def klass
