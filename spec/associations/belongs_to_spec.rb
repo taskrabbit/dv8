@@ -13,13 +13,13 @@ describe 'Belongs To Relationships' do
   end
 
   it 'should not hit the cache when the belongs_to is used normally' do
-    user.should_receive(:with_cfind).never
+    user.should_receive(:dv8!).never
     user.parent.should eql(user)
   end
 
   it 'should check the cache when a belongs_to is hit with the cache' do
-    original = user.method(:with_cfind)
-    user.should_receive(:with_cfind).once do |&block|
+    original = user.method(:dv8!)
+    user.should_receive(:dv8!).once do |&block|
       original.call(&block)
     end
     user.cached_parent.should eql(user)

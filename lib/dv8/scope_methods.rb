@@ -40,14 +40,14 @@ module Dv8
     end
 
     def find_one_from_cache(id)
-      content = Rails.cache.read(klass.cfind_key(id))
+      content = Rails.cache.read(klass.dv8_key(id))
       return nil if content.blank?
       klass.send(:instantiate, content.dup)
     end
 
     def set_cache
       result = yield
-      result.cfind_keys.each do |key|
+      result.dv8_keys.each do |key|
         Rails.cache.write(key, result.attributes)
       end
       result

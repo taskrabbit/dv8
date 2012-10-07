@@ -3,23 +3,29 @@ module Dv8
     extend ActiveSupport::Concern
 
     included do
-      attr_reader :using_cfind
+      include ::Dv8::CanDv8
+
       class << self
-        alias_method_chain :inherited, :cfind
+        alias_method_chain :inherited, :dv8
       end
     end
 
     module ClassMethods
-      def inherited_with_cfind(base)
+      def inherited_with_dv8(base)
         base.send(:include, ::Dv8::DescendantDecorator) unless base.abstract_class?
-        inherited_without_cfind(base)
+        inherited_without_dv8(base)
       end
     end
 
     def method_missing(method_name, *args, &block)
-      if belongs_to = cached_belongs_to?(method_name)
-        with_cfind do
-          send(belongs_to, *args)
+      reflection = dv8_association(method_name)
+      if reflection
+        if reflection.collection?
+          send(reflection.name, *args, &block).cached
+        else
+          self.dv8! do
+            assoc = send(reflection.name, *args, &block)
+          end
         end
       else
         super
@@ -27,24 +33,15 @@ module Dv8
     end
 
     def respond_to?(method_name, include_private = false)
-      super || cached_belongs_to?(method_name)
+      super || !!dv8_association(method_name)
     end 
 
     protected
 
-    def cached_belongs_to?(method_name)
+    def dv8_association(method_name)
       return false unless method_name.to_s =~ /^cached_(.+)$/
-      self.class.reflect_on_all_associations(:belongs_to).each do |assoc|
-        return $1 if $1 == assoc.name.to_s
-      end
-      false
+      self.class.reflect_on_association($1.to_sym)
     end
 
-    def with_cfind
-      @using_cfind = true
-      yield
-    ensure
-      @using_cfind = false
-    end
   end
 end

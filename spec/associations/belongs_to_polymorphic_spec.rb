@@ -14,13 +14,13 @@ describe "Polymorphic Belongs To Associations" do
   end
 
   it 'should access the normal relationship when attempted' do
-    user.should_receive(:with_cfind).never
+    user.should_receive(:dv8!).never
     user.owner.should eql(user)
   end
 
   it 'should use the cache when access via the cached_ form' do
-    original = user.method(:with_cfind)
-    user.should_receive(:with_cfind).once do |&block|
+    original = user.method(:dv8!)
+    user.should_receive(:dv8!).once do |&block|
       original.call(&block)
     end
     user.cached_owner.should eql(user)
@@ -35,9 +35,8 @@ describe "Polymorphic Belongs To Associations" do
   end
 
   it 'should only hit the db once if a record is pushed into the cache' do
-    key = user.cfind_keys.first
-    user.reload
-    user.cached_owner
+    key = user.dv8_keys.first
+    user.reload.cached_owner
     Rails.cache.read(key).should_not be_blank
     user.reload.cached_owner
   end
