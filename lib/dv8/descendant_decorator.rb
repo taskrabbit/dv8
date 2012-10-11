@@ -32,11 +32,8 @@ module Dv8
     end
     
     def dv8_keys
-      keys = []
-      keys << self.id
-      keys << self.friendly_id if self.respond_to?(:friendly_id)
-      keys << self.to_param
-      keys.uniq.map{|id| self.class.dv8_key(id) }
+      keys = %w(id friendly_id to_param).map{|meth| respond_to?(meth) ? send(meth) : nil}
+      keys.compact.uniq.map{|id| self.class.dv8_key(id) }
     end
 
   end

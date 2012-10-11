@@ -10,9 +10,10 @@ module Dv8
       self.dv8ed = val
       if block_given?
         result = yield
-        self.dv8ed = false
         return result
       end
+    ensure
+      self.dv8ed = false if block_given?
     end
 
     def dv8ed?

@@ -6,7 +6,6 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 require 'tester/config/environment'
-# require 'rspec/rails'
 require 'dv8'
 
 Dv8.hook!
