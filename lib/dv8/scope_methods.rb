@@ -14,7 +14,7 @@ module Dv8
     end
 
     def all(*args)
-      ids = (args.any? ? apply_finder_options(args.first) : self).select("#{quoted_table_name}.id").map(&:id)
+      ids = (args.any? ? apply_finder_options(args.first) : self).select("#{quoted_table_name}.#{primary_key}").map(&:id)
       find_multiple_from_cache(ids)
     end
 
