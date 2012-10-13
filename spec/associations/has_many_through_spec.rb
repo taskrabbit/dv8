@@ -21,14 +21,14 @@ describe 'Has Many Through Associations' do
     User.should_receive(:cached).once do 
       original.call
     end
-    user.cached_secondary_friends.all
+    user.cached_secondary_friends
   end
 
   it 'should only hit the db once' do
-    sec = user.cached_secondary_friends.all.first
+    sec = user.cached_secondary_friends.first
     key = sec.dv8_keys.first
     Rails.cache.read(key).should_not be_blank
     Rails.cache.should_receive(:read).with(key).once.and_return(sec.attributes)
-    user.reload.cached_secondary_friends.all.first.should eql(sec)
+    user.reload.cached_secondary_friends.first.should eql(sec)
   end
 end

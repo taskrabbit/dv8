@@ -6,11 +6,11 @@ describe 'Has and Belongs to Many Association' do
   let(:friend){ User.create(:first_name => 'Friendly', :last_name => 'Fred') }
 
   it 'should only hit the db once' do
-    frend = user.reload.cached_friends.all.first
+    frend = user.reload.cached_friends.first
     key = frend.dv8_keys.first
     Rails.cache.read(key).should_not be_blank
     Rails.cache.should_receive(:read).with(key).once.and_return(frend.attributes)
-    user.reload.cached_friends.all.first.should eql(frend)
+    user.reload.cached_friends.first.should eql(frend)
   end
 
 end

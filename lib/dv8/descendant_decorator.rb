@@ -9,7 +9,6 @@ module Dv8
       scope :cached do
         include ::Dv8::ScopeMethods
       end
-
     end
 
 
@@ -17,7 +16,6 @@ module Dv8
       def cfind(*args)
         self.cached.find(*args)
       end
-
 
       def dv8_key(id)
         "#{self.table_name}-#{id}"

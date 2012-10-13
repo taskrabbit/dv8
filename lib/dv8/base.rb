@@ -21,10 +21,11 @@ module Dv8
       reflection = dv8_association(method_name)
       if reflection
         if reflection.collection?
-          send(reflection.name, *args, &block).cached
+          ids = send("#{reflection.name.to_s.singularize}_ids", *args, &block)
+          reflection.klass.cfind(ids)
         else
           self.dv8! do
-            assoc = send(reflection.name, *args, &block)
+            send(reflection.name, *args, &block)
           end
         end
       else

@@ -13,7 +13,7 @@ module Dv8
   class << self
     def hook!
       ActiveRecord::Base.send(:include, Dv8::Base)
-      ActiveRecord::Associations::Association.send(:include, Dv8::Association)
+      ActiveRecord::Associations::SingularAssociation.send(:include, Dv8::Association)
     end
   end
 end

@@ -21,7 +21,7 @@ describe 'Has many associations' do
     User.should_receive(:cached).once do 
       original.call
     end
-    user.cached_children.all
+    user.cached_children
   end
 
 end
