@@ -18,10 +18,7 @@ describe 'Belongs To Relationships' do
   end
 
   it 'should check the cache when a belongs_to is hit with the cache' do
-    original = user.method(:dv8!)
-    user.should_receive(:dv8!).once do |&block|
-      original.call(&block)
-    end
+    user.should_receive(:dv8!).never
     user.cached_parent.should eql(user)
   end
 

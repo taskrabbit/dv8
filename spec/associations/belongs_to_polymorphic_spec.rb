@@ -19,10 +19,7 @@ describe "Polymorphic Belongs To Associations" do
   end
 
   it 'should use the cache when access via the cached_ form' do
-    original = user.method(:dv8!)
-    user.should_receive(:dv8!).once do |&block|
-      original.call(&block)
-    end
+    user.should_receive(:dv8!).never
     user.cached_owner.should eql(user)
   end
 
