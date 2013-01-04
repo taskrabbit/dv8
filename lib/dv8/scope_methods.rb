@@ -42,7 +42,14 @@ module Dv8
     def find_one_from_cache(id)
       content = Rails.cache.read(klass.dv8_key(id))
       return nil if content.blank?
-      klass.send(:instantiate, content.dup)
+
+      # useful for deploys. ensures the attribute hash is up to date with the current known schema  
+      atts = {}
+      klass.column_names.each do |col|
+        atts[col] = content[col] || klass.columns_hash[col].default
+      end
+      
+      klass.send(:instantiate, atts)
     end
 
     def set_cache
