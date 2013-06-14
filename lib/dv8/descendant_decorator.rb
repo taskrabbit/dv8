@@ -6,7 +6,7 @@ module Dv8
       after_update  :expire_dv8
       after_touch   :expire_dv8
 
-      scope :cached do
+      scope :cached, -> { scoped } do
         include ::Dv8::ScopeMethods
       end
     end
