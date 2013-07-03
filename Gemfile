@@ -5,5 +5,4 @@ gemspec
 
 gem 'rails', '3.2.8'
 gem 'rspec-rails'
-gem 'sqlite3'
-gem 'ruby-debug'
+gem 'sqlite3', :platform => [:ruby, :mswin, :mingw]

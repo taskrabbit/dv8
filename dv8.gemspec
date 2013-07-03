@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["mike@mikeonrails.com"]
   gem.description   = %q{DV8 provides a low level cache layer using Rails.cache that keeps a copy of each record found}
   gem.summary       = %q{Low level activerecord cache layer}
-  gem.homepage      = ""
+  gem.homepage      = "http://www.github.com/taskrabbit/dv8"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }

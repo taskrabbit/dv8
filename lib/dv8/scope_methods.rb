@@ -54,8 +54,9 @@ module Dv8
 
     def set_cache
       result = yield
+      atts   = result.attributes
       result.dv8_keys.each do |key|
-        Rails.cache.write(key, result.attributes)
+        Rails.cache.write(key, atts)
       end
       result
     end

@@ -17,7 +17,7 @@ describe 'ActiveRecord Integration' do
   end
 
   it 'should provide dv8 keys to descendents' do
-    User.instance_methods.should include('dv8_keys')
+    User.instance_methods.map(&:to_s).should include('dv8_keys')
   end
 
   it 'should find a record and only hit the cache once' do
