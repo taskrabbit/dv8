@@ -8,21 +8,38 @@ module Dv8
     # AR::Base
     included do
       include ::Dv8::CanDv8
+      
+      after_update  :expire_dv8
+      after_touch   :expire_dv8
 
-      class << self
-        alias_method_chain :inherited, :dv8
+      scope :cached, lambda { scoped } do
+        include ::Dv8::ScopeMethods
       end
+
     end
 
+    
     module ClassMethods
+      def cfind(*args)
+        self.cached.find(*args)
+      end
 
-      # apply the descendent decorator to all real AR children
-      def inherited_with_dv8(base)
-        base.send(:include, ::Dv8::DescendantDecorator) unless base.abstract_class?
-        inherited_without_dv8(base)
+      def dv8_key(id)
+        "#{self.table_name}-#{id}"
       end
     end
 
+    def expire_dv8
+      dv8_keys.each do |key|
+        Rails.cache.delete(key)
+      end
+    end
+    
+    def dv8_keys
+      keys = %w(id friendly_id to_param cached_slug slug).map{|meth| respond_to?(meth) ? send(meth) : nil}
+      keys.compact.uniq.map{|id| self.class.dv8_key(id) }
+    end
+    
     # allow access to associations via the dv8 cache.
     # invoke via object.cached_{association_name}
     # for example: company.cached_members or company.cached_owner

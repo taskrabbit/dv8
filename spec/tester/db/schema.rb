@@ -10,7 +10,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121006060631) do
+ActiveRecord::Schema.define(:version => 20130703174932) do
+
+  create_table "chairs", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "users", :force => true do |t|
     t.string   "first_name"
@@ -19,8 +25,10 @@ ActiveRecord::Schema.define(:version => 20121006060631) do
     t.integer  "best_friend_id"
     t.string   "owner_type"
     t.integer  "owner_id"
+    t.string   "type"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.integer  "chair_id"
   end
 
   create_table "users_friends", :id => false, :force => true do |t|
