@@ -1,6 +1,5 @@
 # decorates ActiveRecord::Base
-# provides all AR objects with the ability to load associations via the dv8 cache
-# propagates dv8 scopes and functionality to descendents via the DescendantDecorator
+# provides AR objects with the ability to load associations via the dv8 cache
 module Dv8
   module Base
     extend ActiveSupport::Concern
@@ -12,7 +11,7 @@ module Dv8
       after_update  :expire_dv8
       after_touch   :expire_dv8
 
-      scope :cached, -> { scoped } do
+      scope :cached, -> { all } do
         include ::Dv8::ScopeMethods
       end
 

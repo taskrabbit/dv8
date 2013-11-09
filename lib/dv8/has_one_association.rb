@@ -11,7 +11,7 @@ module Dv8
     def find_target_with_dv8
       return find_target_without_dv8 unless self.owner.respond_to?(:dv8ed?) && self.owner.dv8ed?
 
-      id = scoped.select(reflection.klass.primary_key).first
+      id = scope.select(reflection.klass.primary_key).first
       object = id ? reflection.klass.cfind(id) : nil
       set_inverse_instance(object)
       object

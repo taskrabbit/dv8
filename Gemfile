@@ -3,6 +3,6 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in dv8.gemspec
 gemspec
 
-gem 'rails', '3.2.8'
+gem 'rails', '4.0.0'
 gem 'rspec-rails'
 gem 'sqlite3', :platform => [:ruby, :mswin, :mingw]

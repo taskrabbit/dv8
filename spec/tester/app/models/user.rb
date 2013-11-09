@@ -1,13 +1,11 @@
 class User < ActiveRecord::Base
   include Dv8::Base
-  
-  attr_accessible :first_name, :last_name, :parent_id, :best_friend
 
   belongs_to :parent, :class_name => 'User'
   belongs_to :owner, :polymorphic => true, :class_name => 'User'
   belongs_to :best_friend, :class_name => 'User'
   belongs_to :chair
-  
+
   has_many :children, :foreign_key => :parent_id, :class_name => 'User'
   has_many :secondary_friends, :through => :children, :source => :best_friend
 
