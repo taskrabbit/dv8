@@ -8,17 +8,17 @@ module Dv8
     # AR::Base
     included do
       include ::Dv8::CanDv8
-      
+
       after_update  :expire_dv8
       after_touch   :expire_dv8
 
-      scope :cached, lambda { scoped } do
+      scope :cached, -> { scoped } do
         include ::Dv8::ScopeMethods
       end
 
     end
 
-    
+
     module ClassMethods
       def cfind(*args)
         self.cached.find(*args)
@@ -34,12 +34,12 @@ module Dv8
         Rails.cache.delete(key)
       end
     end
-    
+
     def dv8_keys
-      keys = %w(id friendly_id to_param cached_slug slug).map{|meth| respond_to?(meth) ? send(meth) : nil}
+      keys = %w(id friendly_id to_param cached_slug slug).map{|meth| self.respond_to?(meth) ? self.send(meth) : nil }
       keys.compact.uniq.map{|id| self.class.dv8_key(id) }
     end
-    
+
     # allow access to associations via the dv8 cache.
     # invoke via object.cached_{association_name}
     # for example: company.cached_members or company.cached_owner
@@ -69,9 +69,9 @@ module Dv8
       end
     end
 
-    def respond_to?(method_name, include_private = false)
+    def respond_to_missing?(method_name, include_private = false)
       super || !!dv8_association(method_name)
-    end 
+    end
 
     protected
 

@@ -27,15 +27,17 @@ module Dv8
       ids.each_with_index do |id, idx|
         result = find_one_from_cache(id)
         results << result
+
         missing_ids[id] = idx unless result
       end
 
-      klass.unscoped.where(:id => missing_ids.keys).each do |record|
-        set_cache do
-          results[missing_ids[record.id]] = record
+      unless missing_ids.empty?
+        klass.unscoped.where(id: missing_ids.keys).each do |record|
+          set_cache do
+            results[missing_ids[record.id]] = record
+          end
         end
-      end unless missing_ids.empty?
-
+      end
       results
     end
 
@@ -43,21 +45,23 @@ module Dv8
       content = Rails.cache.read(klass.dv8_key(id))
       return nil if content.blank?
 
-      # useful for deploys. ensures the attribute hash is up to date with the current known schema  
+      # useful for deploys. ensures the attribute hash is up to date with the current known schema
       atts = {}
       klass.column_names.each do |col|
         atts[col] = content[col] || klass.columns_hash[col].default
       end
-      
+
       klass.send(:instantiate, atts)
     end
 
     def set_cache
       result = yield
       atts   = result.attributes
+
       result.dv8_keys.each do |key|
         Rails.cache.write(key, atts)
       end
+
       result
     end
 
