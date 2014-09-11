@@ -60,14 +60,14 @@ describe 'ActiveRecord Integration' do
     class FakeModel
       def self.after_update(*args); end
       def self.after_touch(*args); end
-      def self.scope(*args, &block); Module.new(&block); end 
+      def self.scope(*args, &block); Module.new(&block); end
       def self.table_name; 'fake_model'; end
       def self.reflect_on_association(*args); nil; end
 
       def initialize(options = {})
         options.reverse_merge(:friendly_id => nil, :id => nil, :to_param => nil, :slug => nil).each do |k,v|
           class_eval <<-EO
-            def #{k}; #{v.nil? ? 'nil' : "'#{v}'"}; end
+            def #{k}; #{v.inspect}; end
           EO
         end
       end
@@ -76,12 +76,12 @@ describe 'ActiveRecord Integration' do
     end
 
     it 'should build dv8_keys properly' do
-      keys(:id => 44).should eql([
+      keys(:id => 44, :friendly_id => '44').should eql([
         'fake_model-44'
       ])
-      
+
       keys(:id => 50, :friendly_id => 'faker').should eql([
-        'fake_model-50', 
+        'fake_model-50',
         'fake_model-faker'
       ])
 

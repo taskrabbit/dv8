@@ -36,7 +36,7 @@ module Dv8
 
     def dv8_keys
       keys = %w(id friendly_id to_param cached_slug slug).map{|meth| self.respond_to?(meth) ? self.send(meth) : nil }
-      keys.compact.uniq.map{|id| self.class.dv8_key(id) }
+      keys.compact.map(&:to_s).uniq.map{|id| self.class.dv8_key(id) }
     end
 
     # allow access to associations via the dv8 cache.
